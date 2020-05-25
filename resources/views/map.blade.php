@@ -91,26 +91,22 @@
     mapboxgl.accessToken = 'pk.eyJ1IjoiYmxlb25pMTEiLCJhIjoiY2s4N2l1NGoyMG52YzNmbzh0OTdnYzBqdyJ9.DDxWvIK1MR07q3JYZvLdew';
     var map = new mapboxgl.Map({
       container: 'map', //
-      //style: 'mapbox://styles/bleoni11/ck87kphoi11rd1jq5zsl29ejq', // harta jeme
+      //style: 'mapbox://styles/bleoni11/ck87kphoi11rd1jq5zsl29ejq', // mymap
       style: 'mapbox://styles/mapbox/dark-v10',
       center: [-73.9978, 40.7209],
       //center: [21, 42.550],
       zoom: 2.6 // zoomi
-      
     });
 
-   
     //full map max
       map.addControl(new mapboxgl.FullscreenControl());
-
 
     // disable map rotation using right click + drag
       map.dragRotate.disable();
  
     // disable map rotation using touch rotation gesture
       map.touchZoomRotate.disableRotation();
-
-      
+   
 /*
       //fitBounds to KOSOVO - FIX!
       document.getElementById('fit').addEventListener('click', function() {
@@ -125,35 +121,34 @@
     var locDisplay = document.getElementById('loc');
     var dateDisplay = document.getElementById('date');
 
-    // JavaScript date constructor:
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+    //by default 30 days prio
+
     var today = new Date();
-    // Use JavaScript to get the date a week ago
+    // get the date from a week ago 
+    //The setDate() method sets the day of the Date object relative to the beginning of the currently set month.
     var priorDate = new Date().setDate(today.getDate() - 7);
-    // Set that to an ISO8601 timestamp as required by the USGS earthquake API
+    // ISO8601 timestamp as required by the api
     var priorDateTs = new Date(priorDate);
+    //The toISOString() method returns a string in simplified extended ISO format 
     var sevenDaysAgo = priorDateTs.toISOString();
 
     function getEarthquakes() {
-
       var source = Math.random().toString()
       var feature = Math.random().toString()
-
+      //GEOJSON DATA LOAD
+      // ADDSOURCE INSTANCE
       map.addSource(source, {
         'type': 'geojson',
         'data': 'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&minmagnitude=1&starttime=' + sevenDaysAgo,
         'generateId': true // This ensures that all features have unique IDs
       });
 
-       
+      // API REFERENCE "A layer defines how data from a specified source will be styled".
       map.addLayer({
         'id': feature,
         'type': 'circle',
         'source': source,
         'paint': {
-          // The feature-state dependent circle-radius expression will render
-          // the radius size according to its magnitude when
-          // a feature's hover state is set to true
           'circle-radius': [
             'case',
             ['boolean',
@@ -178,9 +173,7 @@
           ],
           'circle-stroke-color': '#ff0000',
           'circle-stroke-width': 1,
-          // The feature-state dependent circle-color expression will render
-          // the color according to its magnitude when
-          // a feature's hover state is set to true
+
           'circle-color': [
             'case',
             ['boolean',
@@ -204,16 +197,12 @@
             '#fff'
           ]
         }
-      
 
     });
-
-    
 
     var quakeID = null;
 
     map.on('mousemove', feature, (e) => {
-
       map.getCanvas().style.cursor = 'pointer';
       // Set variables equal to the current feature's magnitude, location, and time
       var quakeMagnitude = e.features[0].properties.mag;
@@ -222,7 +211,7 @@
 
       // Check whether features exist
       if (e.features.length > 0) {
-        // Display the magnitude, location, and time in the sidebar
+        // display the magnitude, location, and time in the sidebar
         magDisplay.textContent = quakeMagnitude;
         locDisplay.textContent = quakeLocation;
         dateDisplay.textContent = quakeDate;
@@ -235,9 +224,8 @@
             id: quakeID
           });
         }
-
         quakeID = e.features[0].id;
-        
+
         // When the mouse moves over the earthquakes-viz layer, set the
         // feature state for the feature under the mouse
         map.setFeatureState({
@@ -261,25 +249,23 @@
         });
       }
       quakeID = null;
-      // Remove the information from the previously hovered feature from the sidebar
+
+      // remove the information from the previously hovered feature from the sidebar
       magDisplay.textContent = '';
       locDisplay.textContent = '';
       dateDisplay.textContent = '';
-      // Reset the cursor style
+      // reset the cursor style
       map.getCanvas().style.cursor = '';
     });
 
       }
 
-    map.on('load', function() {
-      
+    map.on('load', function() {     
       getEarthquakes();
-
-
     });
 
 
-//TODO - Switch Layer not showing API - fix!
+  //TODO - Switch Layer not showing API - fix!
  ////////////////////////////////////////////////////////////
     var layerList = document.getElementById('menu');
     var inputs = layerList.getElementsByTagName('input');
@@ -291,7 +277,6 @@
           getEarthquakes();
         }, 1000)
       }
- 
       for (var i = 0; i < inputs.length; i++) {
         inputs[i].onclick = switchLayer;
       }

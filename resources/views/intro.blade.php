@@ -21,7 +21,6 @@
 
   <!-- Custom styles for this template -->
   <link href="css/grayscale.css" rel="stylesheet">
-
 </head>
 
 <body id="page-top">
@@ -60,7 +59,6 @@
       </div>
     </div>
   </header>
-
 
   <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js"></script>
